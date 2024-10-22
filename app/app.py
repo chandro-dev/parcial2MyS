@@ -11,7 +11,7 @@ pygame.display.set_caption("Simulador de Carrito")
 obstaculos = generar_obstaculos(3, SCREEN_WIDTH, SCREEN_HEIGHT)
 # Crear el carrito
 
-carrito = Carrito(ancho=50, largo=30, L=60)  # Define el ancho, largo y distancia entre ruedas
+carrito = Carrito(ancho=100, largo=50, L=120)  # Define el ancho, largo y distancia entre ruedas
 
 
 clock = pygame.time.Clock()  # Inicializa el reloj

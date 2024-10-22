@@ -2,7 +2,7 @@ import math
 import pygame
 
 class Carrito:
-    def __init__(self, ancho, largo, L, x_inicial=400, y_inicial=300):
+    def __init__(self, ancho, largo, L, x_inicial=500, y_inicial=500):
         self.ancho = ancho  # Ancho del carrito
         self.largo = largo  # Largo del carrito
         self.motor1 = 0  # Velocidad del motor izquierdo
@@ -62,6 +62,7 @@ class Carrito:
         print(f"Posición: x={self.x:.2f}, y={self.y:.2f}, ángulo={math.degrees(self.theta):.2f}°")
         print(f"Velocidad lineal: {self.v:.2f}, Velocidad angular: {self.omega:.2f}")
     def dibujar(self, screen):
+        rotated_image = pygame.transform.rotate(self.image, -180)  # Usar -180 para rotar en sentido antihorario
         rotated_image = pygame.transform.rotate(self.image, -math.degrees(self.theta))
         rect = rotated_image.get_rect(center=(self.x + self.ancho // 2, self.y + self.largo // 2))
         screen.blit(rotated_image, rect.topleft)
