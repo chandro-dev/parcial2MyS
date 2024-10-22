@@ -12,11 +12,13 @@ class Carrito:
         self.theta = 0  # Ángulo de orientación (radianes)
         self.L = L  # Distancia entre las ruedas
         self.v = 0  # Velocidad lineal
-        self.omega = 0  # Velocidad angular
-        
+        self.omega = 0  # Velocidad angular        
         # Cargar la imagen del carrito
         self.image = pygame.image.load("app/public/carrito.png")  # Cambia la ruta a tu imagen
         self.image = pygame.transform.scale(self.image, (self.ancho, self.largo))  # Escalar la imagen al tamaño del carrito
+
+        # Invertir la imagen horizontalmente (True para horizontal, False para vertical)
+        self.image = pygame.transform.flip(self.image, True, False)  # Invertir solo horizontalmente
 
 
     def establecer_velocidades(self, velocidad_motor1, velocidad_motor2):
@@ -62,7 +64,14 @@ class Carrito:
         print(f"Posición: x={self.x:.2f}, y={self.y:.2f}, ángulo={math.degrees(self.theta):.2f}°")
         print(f"Velocidad lineal: {self.v:.2f}, Velocidad angular: {self.omega:.2f}")
     def dibujar(self, screen):
-        rotated_image = pygame.transform.rotate(self.image, -180)  # Usar -180 para rotar en sentido antihorario
+        # Rotar la imagen según el ángulo theta
         rotated_image = pygame.transform.rotate(self.image, -math.degrees(self.theta))
+        
+        # Escalar la imagen rotada al tamaño original del carrito
+        rotated_image = pygame.transform.scale(rotated_image, (self.ancho, self.largo))
+        
+        # Obtener el rectángulo de la imagen rotada centrado en la nueva posición (x, y)
         rect = rotated_image.get_rect(center=(self.x + self.ancho // 2, self.y + self.largo // 2))
+        
+        # Dibujar la imagen en la pantalla
         screen.blit(rotated_image, rect.topleft)
