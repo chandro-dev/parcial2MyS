@@ -1,47 +1,70 @@
 import pygame
 from elementos.carrito import Carrito
-from ventana import manejar_input, dibujar_cuadro_input,dibujar_boton,manejar_click_boton,generar_obstaculos
+from ventana import manejar_input, dibujar_cuadro_input, dibujar_boton, manejar_click_boton, generar_obstaculos,manejar_eventos_input,aplicar_velocidades_inputs
 from config import SCREEN_WIDTH, SCREEN_HEIGHT, WHITE
+
 pygame.init()
 
 # Dimensiones de la ventana
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Simulador de Carrito")
-# Generar obstáculos
-obstaculos = generar_obstaculos(3, SCREEN_WIDTH, SCREEN_HEIGHT)
-# Crear el carrito
 
+# Crear el carrito
 carrito = Carrito(ancho=100, largo=50, L=120)  # Define el ancho, largo y distancia entre ruedas
 
+# Generar obstáculos
+obstaculos = generar_obstaculos(3, SCREEN_WIDTH-200, SCREEN_HEIGHT, carrito)
 
+
+# Configuraciones de input
+font = pygame.font.Font(None, 30)
+input_velocidades = {
+    'motor1': pygame.Rect(610, 80, 100, 30),
+    'motor2': pygame.Rect(610, 140, 100, 30)
+}
+activo_input = {'motor1': False, 'motor2': False}
+texto_input = {'motor1': "", 'motor2': ""}
 clock = pygame.time.Clock()  # Inicializa el reloj
 
 # Bucle principal
 running = True
 while running:
     dt = clock.tick(60) / 1000  # Tiempo desde el último frame en segundos
- # Manejar eventos (incluyendo salida)
+
+    # Manejar eventos (incluyendo salida)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        manejar_eventos_input(event, input_velocidades, activo_input, texto_input)
+    # Actualizar velocidades basadas en inputs
+    aplicar_velocidades_inputs(carrito, texto_input)
+    
+    
+    manejar_input(carrito, activo_input)
 
-    manejar_input(carrito)
     # Actualizar posición del carrito
-    carrito.actualizar_posicion(dt=dt, screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT, obstaculos=obstaculos)
+    carrito.actualizar_posicion(dt=dt, screen_width=SCREEN_WIDTH-200, screen_height=SCREEN_HEIGHT, obstaculos=obstaculos)
 
     # Dibujar todo
-    screen.fill(WHITE)
-    
-    # Dibuja los obstáculos
-    for obstaculo in obstaculos:
-        obstaculo.dibujar(screen)  # Llama al método dibujar para cada obstáculo
+    screen.fill(WHITE)  # Limpiar la pantalla
 
-    dibujar_cuadro_input(screen, carrito)
-    # Dibuja el carrito
+    # Dibujar el carrito
     carrito.dibujar(screen)
+
+    # Dibujar los obstáculos
+    for obstaculo in obstaculos:
+        obstaculo.dibujar(screen)
+
+    # Dibujar el botón para añadir obstáculos
+    button_rect = dibujar_boton(screen)
+
+    # Dibujar el cuadro de configuraciones
+    dibujar_cuadro_input(screen, carrito, font, input_velocidades, texto_input, activo_input)
+
+    # Manejar el clic en el botón para añadir obstáculos
+    manejar_click_boton(button_rect)
+
+    # Actualizar la pantalla
     pygame.display.flip()
-
-
-
 
 pygame.quit()
