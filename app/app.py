@@ -2,6 +2,8 @@ import pygame
 from elementos.carrito import Carrito
 from ventana import manejar_input, dibujar_cuadro_input, dibujar_boton, manejar_click_boton, generar_obstaculos,manejar_eventos_input,aplicar_velocidades_inputs
 from config import SCREEN_WIDTH, SCREEN_HEIGHT, WHITE
+from recorrido_poligono import generar_vertices_poligono, recorrer_poligono
+
 
 pygame.init()
 

@@ -13,7 +13,10 @@ class Carrito:
         self.L = L  # Distancia entre las ruedas
         self.v = 0  # Velocidad lineal
         self.omega = 0  # Velocidad angular   
-        self.velocidad = 0
+        self.rect = pygame.Rect(x_inicial, y_inicial, ancho, largo)
+        self.velocidad = 2
+        self.vertices = []
+        self.current_vertex_index = 0
      
         # Cargar la imagen del carrito
         self.image = pygame.image.load("app/public/carrito.png")  # Cambia la ruta a tu imagen
@@ -75,3 +78,28 @@ class Carrito:
         
         # Dibujar la imagen en la pantalla
         screen.blit(rotated_image, rect.topleft)
+    
+    def establecer_vertices(self, vertices):
+        self.vertices = vertices
+        self.current_vertex_index = 0  # Reiniciar índice de vértices
+
+    def mover(self):
+        if not self.vertices:
+            return
+        
+        target_x, target_y = self.vertices[self.current_vertex_index]
+
+        # Mover hacia el siguiente vértice
+        if self.rect.x < target_x:
+            self.rect.x += self.velocidad
+        elif self.rect.x > target_x:
+            self.rect.x -= self.velocidad
+        
+        if self.rect.y < target_y:
+            self.rect.y += self.velocidad
+        elif self.rect.y > target_y:
+            self.rect.y -= self.velocidad
+
+        # Verificar si ha llegado al vértice
+        if abs(self.rect.x - target_x) < self.velocidad and abs(self.rect.y - target_y) < self.velocidad:
+            self.current_vertex_index = (self.current_vertex_index + 1) % len(self.vertices)
