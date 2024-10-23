@@ -1,6 +1,6 @@
 import pygame
 from elementos.carrito import Carrito
-from ventana import manejar_input, dibujar_cuadro_input, dibujar_boton, manejar_click_boton, generar_obstaculos,manejar_eventos_input,aplicar_velocidades_inputs
+from ventana import manejar_input, dibujar_cuadro_input,dibujar_boton,manejar_click_boton,generar_obstaculos,manejar_velocidades_auto
 from config import SCREEN_WIDTH, SCREEN_HEIGHT, WHITE
 
 pygame.init()
@@ -35,13 +35,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        manejar_eventos_input(event, input_velocidades, activo_input, texto_input)
-    # Actualizar velocidades basadas en inputs
-    aplicar_velocidades_inputs(carrito, texto_input)
-    
-    
-    manejar_input(carrito, activo_input)
 
+    manejar_velocidades_auto(carrito)
     # Actualizar posición del carrito
     carrito.actualizar_posicion(dt=dt, screen_width=SCREEN_WIDTH-200, screen_height=SCREEN_HEIGHT, obstaculos=obstaculos)
 

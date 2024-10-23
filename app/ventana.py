@@ -37,39 +37,26 @@ def manejar_input(carrito, activo_input):
         carrito.establecer_velocidades(velocidad_motor1, velocidad_motor2)
 
 
+def manejar_velocidades_auto(carrito):
+    """Maneja la entrada del usuario para el movimiento del carrito."""
+    velocidad_motor1 = 10
+    velocidad_motor2 = 10
+    # Establece las velocidades en el carrito
+    carrito.establecer_velocidades(velocidad_motor1, velocidad_motor2)
 
+def dibujar_cuadro_input(screen, carrito):
+    # Dibuja el carrito y los obstáculos
+    carrito_rect = pygame.Rect(carrito.x, carrito.y, carrito.ancho, carrito.largo)
+    rotated_surface = pygame.transform.rotate(pygame.Surface((carrito.ancho, carrito.largo)), -math.degrees(carrito.theta))
+    screen.blit(rotated_surface, carrito_rect.topleft)
 
-def dibujar_cuadro_input(screen, carrito, font, input_velocidades, texto_input, activo_input):
-    """Dibuja los cuadros de texto y las etiquetas en pantalla."""
-     # Dimensiones del área de configuración
-    config_width = 200  # Ancho fijo para el área de configuración
-    config_height = 600  # Alto ajustado al alto de la pantalla
-    config_x = 600  # Posición X fija (puedes ajustar según necesites)
+    for obstaculo in obstaculos:
+        obstaculo.dibujar(screen)
 
-    # Dibuja el área de configuración que ocupa todo el height
-    pygame.draw.rect(screen, (200, 200, 200), (config_x, 0, config_width, config_height))  # Fondo para los inputs
-
-    # Dibuja el área de configuración
-
-    # Etiquetas
-    motor1_label = font.render("Motor 1 Velocidad:", True, (0, 0, 0))
-    screen.blit(motor1_label, (610, 50))
-    motor2_label = font.render("Motor 2 Velocidad:", True, (0, 0, 0))
-    screen.blit(motor2_label, (610, 110))
-
-    # Dibujar cuadros de texto
-    for motor, rect in input_velocidades.items():
-        # Cambiar el color del cuadro si está activo
-        color = (0, 255, 0) if activo_input[motor] else (255, 255, 255)
-        pygame.draw.rect(screen, color, rect, 0)
-
-        # Mostrar el texto ingresado
-        texto_superficie = font.render(texto_input[motor], True, (0, 0, 0))
-        screen.blit(texto_superficie, (rect.x + 5, rect.y + 5))
-
-        # Dibujar el borde del cuadro
-        pygame.draw.rect(screen, (0, 0, 0), rect, 2)
-
+    # Verificar colisiones
+    for obstaculo in obstaculos:
+        if carrito_rect.colliderect(obstaculo.rect):
+            print("Colisión detectada con un obstáculo!")
 
 def dibujar_boton(screen):
     """Dibuja un botón para agregar obstáculos."""
